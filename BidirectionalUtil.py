@@ -92,6 +92,9 @@ def NumericallyGetDeltaA(Forward,Reverse,maxiter=200,**kwargs):
     beta = Forward[0].Beta
     # multiply by beta, so we aren't dealing with incredibly small numbers
     offset_fwd,_,Fwd,Rev = _fwd_and_reverse_w_f(Forward,Reverse)
+    return _solve_DeltaA(Rev,Fwd,offset_fwd,maxiter=maxiter,**kwargs)
+
+def _solve_DeltaA(Rev,Fwd,offset_fwd,beta,maxiter=200,**kwargs):
     max_r,max_f = np.max(np.abs(Rev)),np.max(np.abs(Fwd))
     max_abs = max(max_r,max_f)
     Max = max_abs

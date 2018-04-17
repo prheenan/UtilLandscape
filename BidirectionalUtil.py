@@ -164,5 +164,6 @@ def ReverseWeighted(nf,nr,v,W,Wn,delta_A,beta):
     sanit = lambda x: x
     numer = (sanit(v) * nr * Exp(-beta * (sanit(W)+delta_A)))
     denom = (nf + nr * Exp(-beta * (Wn+delta_A)))
-    return np.flip(numer / denom,-1)
+    to_ret =  np.flip(numer / denom,-1)
+    return to_ret
 

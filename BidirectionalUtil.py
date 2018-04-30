@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import sys
 from scipy.optimize import fminbound,newton,brentq
 
+from scipy.interpolate import LSQUnivariateSpline
 
 def DistanceToRoot(DeltaA,Beta,ForwardWork,ReverseWork):
     """
@@ -166,3 +167,29 @@ def ReverseWeighted(nf,nr,v,W,Wn,delta_A,beta):
     denom = (nf + nr * Exp(-beta * (Wn+delta_A)))
     return np.flip(numer / denom,-1)
 
+
+def _spline_filter(x,y,bins=None,num_bins=100,k=3,**kw):
+    """
+    :param x: to filter, independent variable
+    :param y: to filter
+    :param bins: x values we want to bin at
+    :param num_bins: number of bins to use (only used if bins is None)
+    :param k: degree of spline
+    :param kw: see LSQUnivariateSpline
+    :return: spline object
+    """
+    min_x, max_x = min(x), max(x)
+    if (bins is None):
+        # fit a spline at the given bins
+        bins = np.linspace(min_x,max_x,endpoint=True,num=num_bins)
+    # determine where the bins are in the range of the data for this landscape
+    good_idx = np.where((bins >= min_x) & (bins <= max_x))
+    bins_relevant = bins[good_idx]
+    """
+    exclude the first and last bins, to make sure the Schoenberg-Whitney 
+    condition is met for all interior knots (see: 
+docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.LSQUnivariateSpline
+    """
+    t = bins_relevant[1:-1]
+    kw = dict(x=x, t=t, k=k, **kw)
+    return LSQUnivariateSpline(y=y, **kw)

@@ -12,6 +12,46 @@ from scipy.optimize import fminbound,newton,brentq
 
 from scipy.interpolate import LSQUnivariateSpline
 
+from . import Conversions
+
+class _BaseLandscape(object):
+    def __init__(self,q,G0,beta):
+        self._q = q
+        self._G0 = G0
+        self.beta = beta
+    @property
+    def kT(self):
+        return 1/self.beta
+    @property
+    def energy(self):
+        return self._G0
+    @energy.setter
+    def energy(self,e):
+        self._G0 = e
+    @property
+    def G0(self):
+        return self.energy
+    @property
+    def G_0(self):
+        return self.G0
+    @property
+    def q(self):
+        return self._q
+    @q.setter
+    def q(self,q):
+        self._q = q
+    @property
+    def q_nm(self):
+        return self.q * 1e9
+    @property
+    def G0_kT(self):
+        return self.G0 * self.beta
+    @property
+    def G0_kcal_per_mol(self):
+        # J/mol -> kcal/mol (note that the 1/mol are implicit)
+        return self.G0 * Conversions.kcal_per_mol_per_J()
+
+
 def DistanceToRoot(DeltaA,Beta,ForwardWork,ReverseWork):
     """
     Gives the distance to the root in equation 18 (see NumericallyGetDeltaA)

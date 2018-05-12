@@ -50,6 +50,9 @@ class _BaseLandscape(object):
     def G0_kcal_per_mol(self):
         # J/mol -> kcal/mol (note that the 1/mol are implicit)
         return self.G0 * Conversions.kcal_per_mol_per_J()
+    @property
+    def G_kcal(self):
+        return self.G0_kcal_per_mol
 
 
 def DistanceToRoot(DeltaA,Beta,ForwardWork,ReverseWork):

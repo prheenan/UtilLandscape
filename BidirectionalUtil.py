@@ -155,9 +155,9 @@ def _solve_DeltaA(Rev,Fwd,offset_fwd,beta,maxiter=200,**kwargs):
     return to_ret + offset_fwd
 
 
-def Exp(x):
+def Exp(x,tol_v=150):
     # the argment should be consierably less than the max
-    tol = np.log(np.finfo(np.float64).max) - 150
+    tol = np.log(np.finfo(np.float64).max) - tol_v
     to_ret = np.zeros(x.shape,dtype=np.float64)
     safe_idx = np.where((x < tol) & (x > -tol))
     inf_idx = np.where(x >= tol)

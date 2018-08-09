@@ -19,6 +19,9 @@ class _BaseLandscape(object):
         self._q = q
         self._G0 = G0
         self.beta = beta
+    def _slice(self,s):
+        self._q = self._q[s]
+        self._G0 = self._G0[s]
     @property
     def kT(self):
         return 1/self.beta
